@@ -19,14 +19,27 @@
         "FileSystem"
     ],
     "data":{
-        "start_window":"Crosshair",
+        "start_window":"MainMenu",
         "windows":{
-            "Crosshair":{
-                "file":"src/crosshair.html",
+            "MainMenu":{
+                "file":"src/mainmenu.html",
                 "transparent":true,
                 "size":{
                     "width":200,
                     "height":300
+                },
+                "show_in_taskbar":true,
+                "ignore_keyboard_events":true,
+                "grab_keyboard_focus":false,
+                "disable_restore_animation":true,
+                "in_game_only":false
+            },
+            "Crosshair":{
+                "file":"src/crosshair.html",
+                "transparent":true,
+                "size":{
+                    "width":100,
+                    "height":100
                 },
                 "show_in_taskbar":true,
                 "ignore_keyboard_events":true,
@@ -54,6 +67,16 @@
                 "file":"simple-io-plugin.dll",
                 "class":"overwolf.plugins.SimpleIOPlugin"
             }
-        }
+        },
+	    "content_scripts": [
+	    	{ 
+	    		"windows": ["MainMenu"],
+		    	"js": ["src/jquery-2.1.4.min.js", "src/overwolfplugin.js", "src/mainmenu.js"]
+	    	},
+	    	{ 
+	    		"windows": ["Crosshair"],
+		    	"js": ["src/jquery-2.1.4.min.js", "src/crosshair.js"]
+	    	}
+  		]
     }
 }
