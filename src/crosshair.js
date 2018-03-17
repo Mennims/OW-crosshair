@@ -5,7 +5,8 @@
   var plugin = new OverwolfPlugin("simple-io-plugin", true);
   var appPath = "";
   var selected = false;
-  var windowID;
+  var mainWindow;
+  var mainmainWindowID;
   var url = "";
 
   $(document).ready(function(){
@@ -29,24 +30,16 @@
     selected = true;
   });
   $("#leftAdjust").click(function(){
-    overwolf.windows.getCurrentWindow(function(results){
-      overwolf.windows.changePosition(windowID, results.window.left-1, results.window.top);
-    });
+    overwolf.windows.changePosition(mainWindowID, mainWindow.window.left-1, mainWindow.window.top);
   });
   $("#rightAdjust").click(function(){
-    overwolf.windows.getCurrentWindow(function(results){
-      overwolf.windows.changePosition(windowID, results.window.left+1, results.window.top);
-    });
+    overwolf.windows.changePosition(mainWindowID, results.window.left+1, results.window.top);
   });
   $("#downAdjust").click(function(){
-    overwolf.windows.getCurrentWindow(function(results){
-      overwolf.windows.changePosition(windowID, results.window.left, results.window.top+1);
-    });
+    overwolf.windows.changePosition(mainWindowID, results.window.left, results.window.top+1);
   });
   $("#upAdjust").click(function(){
-    overwolf.windows.getCurrentWindow(function(results){
-      overwolf.windows.changePosition(windowID, results.window.left, results.window.top-1);
-    });
+    overwolf.windows.changePosition(mainWindowID, results.window.left, results.window.top-1);
   });
   $("#CrosshairContainer").mousedown(function(e){
     if (!$(e.target).hasClass('noDrag') && !selected) 
@@ -54,7 +47,9 @@
   });
   $("#recenter").click(function(){
     overwolf.games.getRunningGameInfo(function(result){
-      overwolf.windows.changePosition(windowID, (result.logicalWidth/2)-101, (result.logicalHeight/2)-133);
+      if(!result === null) {
+        overwolf.windows.changePosition(mainWindowID, (result.logicalWidth/2)-101, (result.logicalHeight/2)-133);
+      }
     });
   });
 
@@ -62,11 +57,12 @@
   function init(){
     setXPreview(document.getElementById("drop").value);
     
-    // Set windowID
+    // Set mainWindowID and mainWindow
     overwolf.windows.obtainDeclaredWindow("Crosshair",
       function(result) {
         if (result.status == "success") {
-          windowID = result.window.id;
+          mainWindowID = result.window.id;
+          mainWindow = result;
         }
       }
     );
@@ -115,19 +111,19 @@
 
   // Overwolf Window Helper functions
   function dragMove() {
-    overwolf.windows.dragMove(windowID);
+    overwolf.windows.dragMove(mainWindowID);
   };
   function closeWindow() {
-    overwolf.windows.close(windowID);
+    overwolf.windows.close(mainWindowID);
   };
   function minimizeWindow() {
-    overwolf.windows.minimize(windowID);
+    overwolf.windows.minimize(mainWindowID);
   };
   function restoreWindow() {
-    overwolf.windows.restore(windowID);
+    overwolf.windows.restore(mainWindowID);
   };
   function dragResize(edge) {
-    overwolf.windows.dragResize(windowID, edge);
+    overwolf.windows.dragResize(mainWindowID, edge);
   };
 
   // IO Plugin helpers
